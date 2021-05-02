@@ -43,7 +43,6 @@ async def on_message(message):
 #using Wolfram Alpha API for calculations and Wiki Search
 @client.command()
 async def oracle(ctx,*args):
-  print('inside')
   query = '+'.join(args)
   url = f"https://api.wolframalpha.com/v1/result?appid={os.environ['AppID']}&i={query}%3F"
   response = requests.get(url)
@@ -57,7 +56,15 @@ async def oracle(ctx,*args):
 
 #using Google Translate API to translate text
 @client.command()
+async def translate(ctx, lang_to, *args):
+  lang_to = lang_to.lower()
+  if lang_to not in googletrans.LANGUAGES and lang_to not in googletrans.LANGCODES:
+    raise commands.BadArgument("Invalid language to translate to.")
 
+  text = ' '.join(args)
+  translator = googletrans.Translator()
+  text_translated = translator.translate(text, dest=lang_to).text
+  await ctx.send(text_translated)
 
 
 client.run(os.environ['TOKEN'])
