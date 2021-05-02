@@ -1,14 +1,19 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
+from itertools import cycle
 import discord.client
 import os
 import requests
 import json
 import googletrans
 
-
 client = discord.Client()
 client = commands.Bot(command_prefix='$')
+
+#status = cycle(['French', 'English', 'Math', 'Science', 'Geography', 'Art', 'Computer Science', 'History'])
+
+todo = ["homework", "project 1", "project 2"]
+
 
 def get_quote():
   response = requests.get("https://zenquotes.io/api/random")
@@ -33,7 +38,7 @@ async def on_message(message):
     quote = get_quote()
     await message.channel.send(quote)
   
-  #FIX THIS?? SEEMS TO BE A HELP OPTION ALREADY
+  #Todo: Update this help menu
   if msg.startswith('$help'):
     commands = "Commands:\n$inpsire - request an inspirational quote to motivate you\n$oracle - request an answer for your question (for fact checking and math calculations)"
     await message.channel.send(commands)
@@ -66,5 +71,23 @@ async def translate(ctx, lang_to, *args):
   text_translated = translator.translate(text, dest=lang_to).text
   await ctx.send(text_translated)
 
+#keeps track of to do list (action items)
+#  @client.command()
+#  async def todo(ctx, action, *args):
+#    if action == 'clear':
+#      todo.clear()
+#    elif action == 'show':
+#      for i in range(len(todo)):
+#        await ctx.send(i)
+    #elif action == 'add':
+    #elif action == 'delete':
+
+
+
+#Todo: shows what subject you are working on (background task)
+#@tasks.loop(seconds=10)
+#async def change_status():
+  #await client.change_presence(activity=discord.Game(next(status)))
+  #await client.change_presence(activity=discord.Activity(type=discord.ActivityType.studying, name="a movie")))
 
 client.run(os.environ['TOKEN'])
