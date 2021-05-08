@@ -12,7 +12,9 @@ client = commands.Bot(command_prefix='$')
 
 #status = cycle(['French', 'English', 'Math', 'Science', 'Geography', 'Art', 'Computer Science', 'History'])
 
-todo = ["homework", "project 1", "project 2"]
+#pip install googletrans
+
+tdlist = ["homework", "project 1", "project 2"]
 
 
 def get_quote():
@@ -72,15 +74,25 @@ async def translate(ctx, lang_to, *args):
   await ctx.send(text_translated)
 
 #keeps track of to do list (action items)
-#  @client.command()
-#  async def todo(ctx, action, *args):
-#    if action == 'clear':
-#      todo.clear()
-#    elif action == 'show':
-#      for i in range(len(todo)):
-#        await ctx.send(i)
-    #elif action == 'add':
-    #elif action == 'delete':
+@client.command()
+async def todo(ctx, action, *args):
+  output = ""
+  if action == 'clear':
+    tdlist.clear()
+    output = ""
+  elif action == 'show':
+    print(tdlist)
+    for i in range(0, len(tdlist)):
+      output += str(i) + " - " + tdlist[i] + "\n"
+    if len(tdlist) == 0:
+       await ctx.send("No tasks in list!")
+    else:  
+      await ctx.send(output)
+  elif action == 'add':
+    tdlist.append(" ".join(args))
+  elif action == 'delete':
+    item = int("".join(args))
+    del tdlist[item]
 
 
 
